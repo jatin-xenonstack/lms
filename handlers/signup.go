@@ -10,8 +10,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// isValidEmail checks if an email is in a valid format
-
+// CreateUser godoc
+// @Summary Create a new user
+// @Description Register a new user with the provided details
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param authInput body models.AuthInput true "User credentials"
+// @Success 200 {object} models.AuthInput
+// @Failure 400 {object} string "Cannot create user"
+// @Router /auth/signup [post]
 func CreateUser(c *gin.Context) {
 	var authInput models.AuthInput
 	if err := c.ShouldBindJSON(&authInput); err != nil {

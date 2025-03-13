@@ -8,6 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get all books
+// @Description Get all books in the library
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer token"
+// @Success 200 {object} []models.BookInventory
+// @Failure 400 {object} string
+// @Router /book/all [get]
+// @Security BearerAuth
 func GetAllBook(c *gin.Context) {
 	var allBooks []models.BookInventory
 

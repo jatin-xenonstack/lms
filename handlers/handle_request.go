@@ -9,6 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// HandleRequest godoc
+// @Summary Approve or reject a book request
+// @Description Approve or reject a book request based on the request type and book availability
+// @Tags requests
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer token"
+// @Param request body models.ReaderRequest true "Reader Request"
+// @Success 200 {object} string
+// @Failure 400 {object} string
+// @Router /admin/handle-request [post]
+// @Security BearerAuth
 func HandleRequest(c *gin.Context) {
 
 	user, _ := c.Get("currentUser")

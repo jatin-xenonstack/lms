@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// RegisterLibrary godoc
+// @Summary Register a user in a library
+// @Description Register a user in a library
+// @Tags library
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer token"
+// @Param register body models.RegisterLibrary true "Register Library"
+// @Success 200 {object} string : "Successfully Registered"
+// @Failure 400 {object} string
+// @Router /user/register [post]
+// @Security BearerAuth
 func Register(c *gin.Context) {
 	user, _ := c.Get("currentUser")
 	var userData models.User

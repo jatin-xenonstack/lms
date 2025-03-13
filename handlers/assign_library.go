@@ -9,6 +9,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AssignAdmin godoc
+// @Summary Assign an admin to a library
+// @Description Assign an admin role to a user for a specific library
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Param admin body models.Admin true "Admin Data"
+// @Param Authorization header string true "Bearer token"
+// @Success 200 {object} string "Admin Assigned Successfully"
+// @Failure 400 {object} string "no user found"
+// @Failure 400 {object} string "User do not exist"
+// @Failure 400 {object} string "User is already Admin"
+// @Failure 400 {object} string "Request Rejected"
+// @Router /owner/assign-admin [post]
+// @Security Bearer
 func AssignAdmin(c *gin.Context) {
 	user, err := c.Get("currentUser")
 	if !err {

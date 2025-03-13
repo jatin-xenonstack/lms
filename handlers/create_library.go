@@ -9,6 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// CreateLibrary handles the creation of a new library.
+// @Summary Create a new library
+// @Description Create a new library if it does not already exist
+// @Tags libraries
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE3NjU0NDEsImlkIjo5fQ.nyTxmaeg1AFFBmj1rBZ5GAvWl3A153mZXaNGiHYFUt8"
+// @Param library body models.AuthLibrary true "Library to create"
+// @Success 200 {object} models.Library "Library created successfully"
+// @Failure 400 {object} string
+// @Router /owner/create-library [post]
+// @Security Bearer
 func CreateLibrary(c *gin.Context) {
 	var authLibrary models.AuthLibrary
 	err := c.ShouldBindJSON(&authLibrary)

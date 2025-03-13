@@ -8,6 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetAllLibrary godoc
+// @Summary Get all libraries
+// @Description Get details of all libraries
+// @Tags libraries
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} []models.Library
+// @Router /getalllibrary [get]
 func GetAllLibrary(c *gin.Context) {
 	var alllibrary []models.Library
 

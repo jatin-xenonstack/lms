@@ -9,6 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// RequestEvent godoc
+// @Summary Request or return a book
+// @Description User can request to borrow or return a book from the library
+// @Tags request
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer token"
+// @Param request body models.RequestInput true "Request Input"
+// @Success 200 {object} string
+// @Failure 400 {object} string
+// @Failure 400 {object} string
+// @Security BearerAuth
+// @Router /user/make-request [post]
 func RequestEvent(c *gin.Context) {
 	var inputRequest models.RequestInput
 	if err := c.ShouldBindJSON(&inputRequest); err != nil {

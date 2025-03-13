@@ -1,0 +1,535 @@
+basePath: /
+definitions:
+  models.Admin:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  models.AuthInput:
+    properties:
+      contact_number:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - contact_number
+    - email
+    - name
+    - password
+    type: object
+  models.AuthLibrary:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  models.AuthLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.BookInventory:
+    properties:
+      author:
+        type: string
+      available_copies:
+        type: integer
+      isbn:
+        type: string
+      library_id:
+        type: integer
+      publisher:
+        type: string
+      title:
+        type: string
+      total_copies:
+        type: integer
+      version:
+        type: string
+    required:
+    - author
+    - available_copies
+    - isbn
+    - library_id
+    - publisher
+    - title
+    - total_copies
+    - version
+    type: object
+  models.InputBook:
+    properties:
+      author:
+        type: string
+      isbn:
+        type: string
+      publisher:
+        type: string
+      title:
+        type: string
+      total_copies:
+        type: integer
+      version:
+        type: string
+    required:
+    - author
+    - isbn
+    - publisher
+    - title
+    - total_copies
+    - version
+    type: object
+  models.Library:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.ReaderRequest:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  models.RegisterLibrary:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  models.RequestEvent:
+    properties:
+      approve_date:
+        type: string
+      approver_id:
+        type: integer
+      id:
+        type: integer
+      isbn:
+        type: string
+      library_id:
+        type: integer
+      request_date:
+        type: string
+      request_type:
+        default: borrow
+        type: string
+      user_id:
+        type: integer
+    required:
+    - isbn
+    - library_id
+    - user_id
+    type: object
+  models.RequestInput:
+    properties:
+      isbn:
+        type: string
+      library_id:
+        type: integer
+      request_type:
+        type: string
+    required:
+    - isbn
+    - library_id
+    - request_type
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for a library management system.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Library Management System API
+  version: "1.0"
+paths:
+  //book/{search}:
+    get:
+      consumes:
+      - application/json
+      description: Search for books by title, author, or publisher
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Search query
+        in: path
+        name: search
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.BookInventory'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Search for books
+      tags:
+      - books
+  /admin/handle-request:
+    post:
+      consumes:
+      - application/json
+      description: Approve or reject a book request based on the request type and
+        book availability
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Reader Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ReaderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Approve or reject a book request
+      tags:
+      - requests
+  /admin/see-request:
+    get:
+      consumes:
+      - application/json
+      description: Get all requests for the library managed by the admin
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.RequestEvent'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: See all requests
+      tags:
+      - requests
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT token
+      parameters:
+      - description: Login credentials
+        in: body
+        name: authLogin
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Login user
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the provided details
+      parameters:
+      - description: User credentials
+        in: body
+        name: authInput
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthInput'
+        "400":
+          description: Cannot create user
+          schema:
+            type: string
+      summary: Create a new user
+      tags:
+      - users
+  /book/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all books in the library
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.BookInventory'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get all books
+      tags:
+      - books
+  /getalllibrary:
+    get:
+      consumes:
+      - application/json
+      description: Get details of all libraries
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Library'
+            type: array
+      summary: Get all libraries
+      tags:
+      - libraries
+  /insert-book:
+    post:
+      consumes:
+      - application/json
+      description: Insert a new book into the library
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Book to insert
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputBook'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.BookInventory'
+        "400":
+          description: Book is already present in library
+          schema:
+            type: string
+        "502":
+          description: available_copies or total_copies can not be negative
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Insert a new book into the library
+      tags:
+      - books
+  /owner/assign-admin:
+    post:
+      consumes:
+      - application/json
+      description: Assign an admin role to a user for a specific library
+      parameters:
+      - description: Admin Data
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/models.Admin'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Admin Assigned Successfully
+          schema:
+            type: string
+        "400":
+          description: Request Rejected
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Assign an admin to a library
+      tags:
+      - admin
+  /owner/create-library:
+    post:
+      consumes:
+      - application/json
+      description: Create a new library if it does not already exist
+      parameters:
+      - description: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE3NjU0NDEsImlkIjo5fQ.nyTxmaeg1AFFBmj1rBZ5GAvWl3A153mZXaNGiHYFUt8
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Library to create
+        in: body
+        name: library
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthLibrary'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Library created successfully
+          schema:
+            $ref: '#/definitions/models.Library'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Create a new library
+      tags:
+      - libraries
+  /user/make-request:
+    post:
+      consumes:
+      - application/json
+      description: User can request to borrow or return a book from the library
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Request Input
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.RequestInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Request or return a book
+      tags:
+      - request
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a user in a library
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Register Library
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterLibrary'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Register a user in a library
+      tags:
+      - library
+swagger: "2.0"

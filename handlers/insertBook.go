@@ -9,6 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Insert a new book into the library
+// @Description Insert a new book into the library
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer token"
+// @Param book body models.InputBook true "Book to insert"
+// @Success 200 {object} models.BookInventory
+// @Failure 400 {object} string "Book is already present in library"
+// @Failure 502 {object} string "available_copies or total_copies can not be negative"
+// @Router /insert-book [post]
+// @Security BearerAuth
 func InsertBook(c *gin.Context) {
 	var inputBook models.InputBook
 	if err := c.ShouldBindJSON(&inputBook); err != nil {

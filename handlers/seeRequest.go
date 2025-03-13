@@ -9,6 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SeeRequest godoc
+// @Summary See all requests
+// @Description Get all requests for the library managed by the admin
+// @Tags requests
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer token"
+// @Success 200 {object} []models.RequestEvent
+// @Failure 400 {object} string
+// @Router /admin/see-request [get]
+// @Security BearerAuth
 func SeeRequest(c *gin.Context) {
 
 	user, _ := c.Get("currentUser")

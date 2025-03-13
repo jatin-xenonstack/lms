@@ -11,6 +11,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Login godoc
+// @Summary Login user
+// @Description Authenticate user and return JWT token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param authLogin body models.AuthLogin true "Login credentials"
+// @Success 200 {object} map[string]string "token"
+// @Failure 400 {object} map[string]string "error"
+// @Router /auth/login [post]
 func Login(c *gin.Context) {
 	var authLogin models.AuthLogin
 

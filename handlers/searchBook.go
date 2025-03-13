@@ -9,6 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SearchBook godoc
+// @Summary Search for books
+// @Description Search for books by title, author, or publisher
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer token"
+// @Param search path string true "Search query"
+// @Success 200 {object}  []models.BookInventory
+// @Failure 400 {object} string
+// @Router //book/{search} [get]
+// @Security BearerAuth
 func SearchBook(c *gin.Context) {
 	var allBooks []models.BookInventory
 	q := c.Param("search")
